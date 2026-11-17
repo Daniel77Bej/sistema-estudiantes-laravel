@@ -1,66 +1,109 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Sistema de Registro de Estudiantes
+1. Descripción
+Aplicación web académica para administrar la información de estudiantes. Permite registrar, consultar, buscar, filtrar, ordenar, actualizar y eliminar registros.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+El proyecto está desarrollado con Laravel, PHP, MySQL, Blade, HTML, CSS y JavaScript, siguiendo la arquitectura Modelo-Vista-Controlador (MVC).
+El alcance de esta entrega no incluye inicio de sesión ni cierre de sesión.
 
-## About Laravel
+2. Funcionalidades
+- Registrar estudiantes.
+- Mostrar el listado de estudiantes.
+- Consultar el detalle de un estudiante.
+- Buscar por nombre o correo electrónico.
+- Filtrar por programa académico.
+- Ordenar los resultados.
+- Editar la información de un estudiante.
+- Eliminar registros.
+- Validar los datos antes de guardar o actualizar.
+- Evitar documentos/identificadores y correos duplicados, mediante las validaciones y restricciones configuradas en el proyecto.
+3. Tecnologías
+- PHP (versión compatible con la versión de Laravel instalada).
+- Laravel.
+- MySQL o MariaDB.
+- Composer.
+- XAMPP (o un servidor MySQL equivalente).
+- Git y GitHub.
+- Blade, HTML, CSS y JavaScript.
+Consulta composer.json para conocer la versión exacta de Laravel y los requisitos de PHP de esta copia del proyecto.
+4. Base de datos
+- Base de datos: estudiantes.
+- Tabla principal: personal.
+- Clave primaria: ID.
+La tabla personal contiene los campos utilizados por el sistema: ID, apellido, nombre, fecha_nacimiento, codigo_estudiantil, programa, semestre, correo, telefono y direccion.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+La estructura debe poder prepararse mediante las migraciones del proyecto. Si se entrega un respaldo SQL adicional, debe estar actualizado, ser compatible con la estructura de las migraciones y utilizar datos ficticios o anonimizados.
+5. Organización principal
+app/
+  Http/Controllers/PersonalController.php
+  Models/Personal.php
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+database/
+  migrations/
+  seeders/
+  backups/             (opcional: respaldo SQL anonimizado)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+resources/
+  views/personal/
+    create.blade.php
+    edit.blade.php
+    index.blade.php
+    show.blade.php
 
-## Learning Laravel
+routes/
+  web.php
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+README.md
+registro-pruebas.md
+entrega-final.md
+6. Requisitos
+- PHP compatible con la versión de Laravel del proyecto.
+- Composer.
+- MySQL o MariaDB.
+- Git (opcional para ejecutar localmente, necesario para trabajar con el repositorio).
+7. Instalación
+7.1. Clonar el repositorio
+git clone URL_DEL_REPOSITORIO
+cd example-app
+7.2. Instalar dependencias
+composer install
+7.3. Crear el archivo de entorno
+En PowerShell:
+Copy-Item .env.example .env
+Configurar en .env los datos de conexión de la base de datos local:
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=estudiantes
+DB_USERNAME=root
+DB_PASSWORD=
+Ajustar usuario y contraseña según la instalación local de MySQL.
+7.4. Crear la base de datos
+Crear en MySQL una base de datos llamada estudiantes.
+7.5. Preparar las tablas
+Si el proyecto incluye las migraciones completas y actualizadas:
+php artisan migrate
+Si se entrega un respaldo SQL como alternativa, importarlo en la base estudiantes siguiendo las instrucciones del docente. No ejecutar simultáneamente una importación y migraciones que intenten crear las mismas tablas.
+7.6. Generar la clave de Laravel y limpiar configuración
+php artisan key:generate
+php artisan config:clear
+7.7. Iniciar el servidor
+php artisan serve
+Abrir http://127.0.0.1:8000 en el navegador.
+8. Validaciones
+El sistema valida los campos requeridos, los tipos y formatos de datos, los límites definidos para cada campo, el rango del semestre, el formato del correo y la unicidad de los identificadores y correos, según las reglas configuradas en el controlador y la base de datos.
+9. Pruebas
+Las pruebas funcionales realizadas y sus resultados deben quedar registrados en registro-pruebas.md. Se recomienda usar datos ficticios y comprobar tanto los casos válidos como los inválidos.
+10. Repositorio y archivos que no deben publicarse
+No subir al repositorio:
+- .env ni archivos que contengan contraseñas, claves o credenciales.
+- vendor/ ni node_modules/.
+- Sesiones, cachés o logs generados.
+- Datos personales reales de estudiantes.
+Sí conservar:
+- .env.example con valores de ejemplo.
+- composer.json y composer.lock.
+- Código fuente, vistas, rutas y migraciones.
+- Documentación y pruebas.
+- Un respaldo SQL únicamente si es necesario y está anonimizado.
+11. Alcance académico
+Este proyecto aplica operaciones CRUD, validación de formularios, acceso a MySQL, organización MVC y control de versiones. La autenticación de usuarios (inicio y cierre de sesión) no forma parte del alcance implementado de esta entrega.

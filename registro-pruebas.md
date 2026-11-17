@@ -1,0 +1,45 @@
+Registro de pruebas — Sistema de Registro de Estudiantes
+1. Objetivo
+Dejar constancia de la revisión funcional del sistema de registro de estudiantes, verificando las operaciones de creación, consulta, búsqueda, edición y eliminación, así como las reglas de validación y el uso de la tabla personal en MySQL.
+2. Alcance de la revisión
+La revisión corresponde al código fuente incluido en el archivo example-app.zip. Se inspeccionaron las rutas, el modelo Personal, el controlador PersonalController y las vistas Blade relacionadas con el registro y la administración de estudiantes.
+
+El sistema revisado contiene operaciones CRUD y una ruta JSON para consultar, buscar, filtrar y ordenar estudiantes. El inicio de sesión y el cierre de sesión no hacen parte del alcance de esta entrega.
+
+Importante sobre los resultados: este documento registra lo que se pudo comprobar mediante inspección del código. No se ejecutó la aplicación conectada a una base de datos ni se realizaron clics en el navegador durante esta revisión. Por eso, no se presentan como ejecutadas pruebas que requieren interacción real con el sistema. Los resultados de código se identifican expresamente y las comprobaciones de ejecución quedan diferenciadas.
+3. Casos de prueba y resultados de la revisión
+N.º	Prueba	Resultado esperado	Resultado obtenido en la revisión	Estado
+1	Registrar un estudiante con todos los datos válidos.	El sistema guarda el estudiante y regresa al listado mostrando un mensaje de confirmación.	El método store valida los campos, asigna el valor de documento al campo ID, crea el registro mediante Personal::create y redirige a personal.index con el mensaje “Estudiante registrado correctamente”. La operación está implementada en el código; no se ejecutó contra MySQL en esta revisión.	Implementado; ejecución no verificada
+2	Registrar un estudiante con un documento que ya existe.	El sistema rechaza el registro duplicado y muestra el error de validación.	El campo documento tiene la regla unique:personal,ID, por lo que Laravel debe rechazar un ID repetido antes de guardar. No se envió un formulario real para comprobar el mensaje en pantalla.	Implementado; ejecución no verificada
+3	Registrar un estudiante con un correo que ya existe.	El sistema rechaza el correo repetido y no crea el registro.	El campo correo incluye la regla unique:personal,correo en el método store. La validación está presente; no se probó mediante una petición real.	Implementado; ejecución no verificada
+4	Enviar el formulario de registro con campos obligatorios vacíos.	El sistema impide guardar y presenta los errores correspondientes.	Los campos del método store están definidos como required. Laravel realiza la validación antes de ejecutar Personal::create. No se comprobó visualmente la presentación de los errores.	Implementado; ejecución no verificada
+5	Registrar un estudiante con semestre menor que 1 o mayor que 10.	El sistema rechaza el valor que esté fuera del rango permitido.	El campo semestre utiliza la regla `integer	between:1,10` tanto al registrar como al actualizar. El rango está definido en el controlador; no se enviaron valores de prueba al servidor.
+6	Buscar estudiantes por nombre.	El listado debe mostrar los registros cuyo nombre coincida con el texto ingresado.	El método obtenerEstudiantes aplica una búsqueda LIKE sobre la columna nombre cuando recibe el parámetro buscar. La consulta está implementada; no se ejecutó desde el navegador.	Implementado; ejecución no verificada
+7	Buscar estudiantes por correo electrónico.	El listado debe mostrar los registros cuyo correo coincida con el texto ingresado.	El método obtenerEstudiantes combina la búsqueda por nombre con orWhere sobre correo. La búsqueda por correo está contemplada en el código; no se comprobó con datos en ejecución.	Implementado; ejecución no verificada
+8	Filtrar estudiantes por programa académico.	El resultado debe contener únicamente estudiantes del programa seleccionado.	El método obtenerEstudiantes aplica where('programa', $programa) cuando recibe el parámetro de programa. El filtro está implementado; no se verificó con una consulta real.	Implementado; ejecución no verificada
+9	Ordenar los estudiantes de forma ascendente y descendente.	Los resultados deben ordenarse por nombre según el orden solicitado.	El controlador admite asc y desc, y usa orderBy('nombre', $orden). Si recibe otro valor, establece asc como opción segura. La lógica está implementada; no se comparó el resultado en pantalla.	Implementado; ejecución no verificada
+10	Consultar los datos de un estudiante específico.	Debe abrirse una vista con la información del estudiante seleccionado.	El método show busca el registro mediante Personal::findOrFail($id) y retorna la vista personal.show. La ruta de consulta está incluida en el recurso personal; no se abrió la vista en un navegador durante esta revisión.	Implementado; ejecución no verificada
+11	Editar los datos de un estudiante.	El sistema debe actualizar únicamente el registro seleccionado y mostrar una confirmación.	El método edit carga el registro y la vista personal.edit. El método update valida los datos, conserva la unicidad del correo ignorando el ID del propio estudiante, actualiza el modelo y redirige al listado con un mensaje de confirmación. No se envió una actualización real a MySQL.	Implementado; ejecución no verificada
+12	Cancelar la eliminación de un estudiante.	Al cancelar la confirmación, el registro debe permanecer en la base de datos.	En personal.index el botón de eliminar ejecuta confirm('¿Está seguro de eliminar este estudiante?'). Cuando el usuario cancela, el código retorna sin enviar el formulario DELETE. La protección está presente en JavaScript; no se probó haciendo clic en el navegador.	Implementado; ejecución no verificada
+13	Confirmar la eliminación de un estudiante.	El sistema debe eliminar únicamente el estudiante seleccionado y regresar al listado.	Al confirmar, la vista construye un formulario POST con el método simulado DELETE y el token CSRF. El método destroy localiza el estudiante, ejecuta delete() y redirige al listado. La secuencia está implementada; no se ejecutó contra la base de datos.	Implementado; ejecución no verificada
+14	Reiniciar o volver a abrir la aplicación y consultar los registros.	Los estudiantes guardados deben continuar almacenados en MySQL.	El modelo Personal utiliza la tabla personal y Eloquent realiza las operaciones sobre esa tabla. La persistencia depende de que la conexión configurada en .env apunte a la base correcta y de que la tabla exista. No se reinició la aplicación ni se verificó la conexión durante esta revisión.	Requiere comprobación en ejecución
+
+
+4. Resultado general
+La inspección del código confirma que están implementadas las funciones principales del CRUD:
+- Crear: formulario y método store, con validación de campos, documento y correo.
+- Leer: listado general y consulta individual.
+- Actualizar: formulario de edición y método update, con validación de datos.
+- Eliminar: confirmación en la interfaz y método destroy.
+- Buscar y filtrar: búsqueda por nombre o correo y filtro por programa mediante la ruta JSON.
+- Ordenar: orden ascendente o descendente por nombre.
+El modelo Personal está configurado para utilizar la tabla personal, la clave primaria ID, una clave no autoincremental y sin marcas de tiempo automáticas (created_at y updated_at).
+5. Observaciones técnicas pendientes de comprobar
+1. En el ZIP revisado no aparece una migración propia para crear la tabla personal; la carpeta database/migrations contiene únicamente las migraciones predeterminadas de Laravel. Por tanto, la creación de la tabla depende de importar el archivo SQL o de incorporar la migración correspondiente.
+2. El archivo SQL suministrado contiene registros con datos personales. No debe publicarse en un repositorio público sin anonimizar esos datos o reemplazarlos por registros ficticios.
+3. El proyecto incluido en el ZIP declara Laravel ^10.10 y PHP ^8.1 en composer.json. El material de Encuentro 15 indica Laravel 13 y PHP 8.3 o superior; debe actualizarse el proyecto o confirmarse con el docente cuál versión se exige para la entrega.
+4. Para cerrar la verificación funcional hace falta ejecutar la aplicación con la base de datos configurada y probar los formularios desde el navegador. Este documento no afirma que esas pruebas de ejecución ya se hayan realizado.
+6. Conclusión
+De acuerdo con la inspección del código fuente entregado, el sistema cuenta con la estructura necesaria para administrar estudiantes mediante operaciones CRUD, validaciones, búsqueda, filtro y ordenamiento. La revisión permitió identificar la lógica correspondiente en el controlador, el modelo, las rutas y las vistas.
+
+La implementación del CRUD está presente en el código revisado. La aprobación definitiva de las pruebas funcionales queda condicionada a ejecutar la aplicación con MySQL y comprobar los resultados desde la interfaz. No se incluyen funciones de inicio de sesión ni cierre de sesión porque están fuera del alcance definido para esta entrega.
