@@ -42,6 +42,6 @@ La versión exacta de Laravel y los requisitos de PHP se consultan en composer.j
 - registro-pruebas.md con el registro de pruebas.
 - Este documento de entrega.
 9. Repositorio
-Enlace: PEGAR_AQUI_LA_URL_DEL_REPOSITORIO
+Enlace: https://github.com/Daniel77Bej/sistema-estudiantes-laravel.git
 10. Declaración final
 El proyecto se presenta con el alcance descrito en este documento. Las pruebas y resultados se deben corresponder con lo registrado en el archivo registro-pruebas.md. No se incluyen credenciales ni datos personales reales en el repositorio.
